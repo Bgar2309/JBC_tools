@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Projets - [Nom du collègue]</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 600px; 
+            margin: 50px auto; 
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; text-align: center; }
+        .link-button {
+            display: block;
+            padding: 15px;
+            margin: 10px 0;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 16px;
+        }
+        .link-button:hover { background: #0056b3; }
+        .status { 
+            font-size: 12px; 
+            padding: 5px 10px; 
+            border-radius: 3px; 
+            margin-left: 10px;
+        }
+        .prod { background: #28a745; color: white; }
+        .test { background: #ffc107; color: black; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mes Applications</h1>
+        
+        <a href="https://votre-app1.com" class="link-button">
+            Application 1 <span class="status prod">PROD</span>
+        </a>
+        
+        <a href="https://test-app2.com" class="link-button">
+            Application 2 <span class="status test">TEST</span>
+        </a>
+        
+        <a href="https://votre-app3.com" class="link-button">
+            Application 3 <span class="status prod">PROD</span>
+        </a>
+        
+        <p style="text-align: center; color: #666; margin-top: 30px;">
+            Dernière mise à jour : <span id="date"></span>
+        </p>
+    </div>
+    
+    <script>
+        document.getElementById('date').textContent = new Date().toLocaleDateString('fr-FR');
+    </script>
+</body>
+</html>
