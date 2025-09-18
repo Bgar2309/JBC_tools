@@ -580,6 +580,18 @@
             }
         }
         
+        // Force page refresh and cache clearing
+        function forceRefresh() {
+            // Add timestamp to force cache busting
+            const timestamp = new Date().getTime();
+            console.log(`🚧 JBC Construction Zone loaded at: ${timestamp}`);
+            
+            // Force reload from server if page seems cached
+            if (performance.navigation.type === 2) { // Back/Forward navigation
+                window.location.reload(true);
+            }
+        }
+        
         // Mise à jour de la date
         function updateDate() {
             const dateElement = document.getElementById('date');
