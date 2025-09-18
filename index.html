@@ -1,75 +1,630 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- Headers anti-cache -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    
-    <title>JBC Tools</title>
+    <title>JBC Tools - Work in Progress! 🚧</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            max-width: 600px; 
-            margin: 50px auto; 
-            padding: 20px;
-            background: #f5f5f5;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .container {
+        
+        body {
+            font-family: 'Arial Black', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Particules en arrière-plan */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .particle {
+            position: absolute;
+            background: #ff4444;
+            border-radius: 50%;
+            opacity: 0.6;
+        }
+        
+        /* Header avec logo JBC animé */
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .jbc-logo {
+            display: inline-block;
+            background: #ff4444;
+            color: white;
+            padding: 20px 40px;
+            border-radius: 15px;
+            font-size: 4em;
+            font-weight: 900;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transform: perspective(1000px) rotateX(0deg);
+            transition: all 0.3s ease;
+        }
+        
+        .jbc-logo:hover {
+            transform: perspective(1000px) rotateX(-10deg) rotateY(5deg);
+            box-shadow: 0 20px 40px rgba(255, 68, 68, 0.4);
+        }
+        
+        .jbc-logo::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            50% { transform: translateX(0%) translateY(0%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        .subtitle {
+            color: #ffaa00;
+            font-size: 1.5em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+        }
+        
+        .work-ahead {
+            color: #ff6600;
+            font-size: 1.2em;
+            font-weight: bold;
+            animation: blink 1.5s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+        
+        /* Cônes animés */
+        .cones-container {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            z-index: 5;
+        }
+        
+        .cone {
+            position: absolute;
+            width: 60px;
+            height: 80px;
+            cursor: pointer;
+        }
+        
+        .cone-body {
+            width: 100%;
+            height: 70px;
+            background: linear-gradient(to bottom, #ff6600 0%, #ff4400 100%);
+            clip-path: polygon(40% 0%, 60% 0%, 85% 100%, 15% 100%);
+            position: relative;
+        }
+        
+        .cone-stripes {
+            position: absolute;
+            width: 90%;
+            height: 8px;
             background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            left: 5%;
+            top: 25%;
         }
-        h1 { color: #333; text-align: center; }
-        .link-button {
-            display: block;
-            padding: 15px;
-            margin: 10px 0;
-            background: #007bff;
+        
+        .cone-stripes::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 8px;
+            background: white;
+            top: 20px;
+        }
+        
+        .cone-base {
+            width: 90%;
+            height: 10px;
+            background: #333;
+            margin: 0 auto;
+            border-radius: 50%;
+        }
+        
+        .cone-1 { top: 50px; left: 10%; }
+        .cone-2 { top: 100px; right: 15%; }
+        .cone-3 { top: 200px; left: 20%; }
+        .cone-4 { top: 250px; right: 25%; }
+        .cone-5 { top: 350px; left: 15%; }
+        
+        /* Container principal */
+        .main-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            position: relative;
+            z-index: 10;
+            border: 3px solid #ff4444;
+        }
+        
+        .page-title {
+            text-align: center;
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .title-char {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(50px) rotateX(90deg);
+        }
+        
+        /* Boutons d'applications */
+        .app-links {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .app-button {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
             color: white;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            transform: translateX(-100px);
+            opacity: 0;
+        }
+        
+        .app-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 123, 255, 0.4);
+        }
+        
+        .app-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .app-button:hover::before {
+            left: 100%;
+        }
+        
+        .app-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+        }
+        
+        .status-badge {
+            margin-left: auto;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .prod { background: #28a745; }
+        .test { background: #ffc107; color: #333; }
+        
+        /* Section footer */
+        .footer {
             text-align: center;
-            font-size: 16px;
+            margin-top: 40px;
+            color: #666;
+            font-size: 1.1em;
         }
-        .link-button:hover { background: #0056b3; }
-        .status { 
-            font-size: 12px; 
-            padding: 5px 10px; 
-            border-radius: 3px; 
-            margin-left: 10px;
+        
+        .date-display {
+            color: #ff4444;
+            font-weight: bold;
+            font-size: 1.2em;
         }
-        .prod { background: #28a745; color: white; }
-        .test { background: #ffc107; color: black; }
+        
+        /* Animation de construction */
+        .construction-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6600, #ffaa00, #ff6600);
+            background-size: 200% 100%;
+            animation: construction-move 2s linear infinite;
+            z-index: 1000;
+        }
+        
+        @keyframes construction-move {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* Effet de typing pour le titre */
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            background-color: #ff4444;
+            animation: cursor-blink 1s infinite;
+        }
+        
+        @keyframes cursor-blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .jbc-logo { font-size: 2.5em; padding: 15px 25px; }
+            .main-container { margin: 20px; padding: 25px; }
+            .cone { transform: scale(0.7); }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Apps</h1>
-        <a href="https://chatbotgoogle-test.up.railway.app/" class="link-button" target="_blank">
-            NEW Stencil chat bot <span class="status test">PRODUCTION</span>
-        </a>
-              
-        <a href="https://stencilizer-google-production.up.railway.app/" class="link-button" target="_blank">
-            Stencilizer <span class="status test">TEST</span>
-        </a>
-        
-        <a href="https://vectorizer-ehsxjbc-production.up.railway.app" class="link-button" target="_blank">
-            Vectorizer <span class="status test">TEST</span>
-        </a>
-
-        
-        <p style="text-align: center; color: #666; margin-top: 30px;">
-            Last Update : <span id="date"></span>
-        </p>
+    <!-- Ligne de construction animée -->
+    <div class="construction-line"></div>
+    
+    <!-- Particules -->
+    <div class="particles" id="particles"></div>
+    
+    <!-- Header avec logo JBC -->
+    <div class="header">
+        <div class="jbc-logo" id="jbc-logo">
+            <span class="logo-char">j</span><span class="logo-char">b</span><span class="logo-char">c</span>
+        </div>
+        <div class="subtitle">Tools & Applications</div>
+        <div class="work-ahead">🚧 Digital Construction Zone 🚧</div>
     </div>
     
+    <!-- Cônes animés -->
+    <div class="cones-container">
+        <div class="cone cone-1">
+            <div class="cone-body">
+                <div class="cone-stripes"></div>
+            </div>
+            <div class="cone-base"></div>
+        </div>
+        <div class="cone cone-2">
+            <div class="cone-body">
+                <div class="cone-stripes"></div>
+            </div>
+            <div class="cone-base"></div>
+        </div>
+        <div class="cone cone-3">
+            <div class="cone-body">
+                <div class="cone-stripes"></div>
+            </div>
+            <div class="cone-base"></div>
+        </div>
+        <div class="cone cone-4">
+            <div class="cone-body">
+                <div class="cone-stripes"></div>
+            </div>
+            <div class="cone-base"></div>
+        </div>
+        <div class="cone cone-5">
+            <div class="cone-body">
+                <div class="cone-stripes"></div>
+            </div>
+            <div class="cone-base"></div>
+        </div>
+    </div>
+    
+    <!-- Container principal -->
+    <div class="main-container">
+        <h1 class="page-title" id="main-title">
+            <span class="title-word">
+                <span class="title-char">A</span><span class="title-char">p</span><span class="title-char">p</span><span class="title-char">s</span>
+            </span>
+            <span class="typing-cursor"></span>
+        </h1>
+        
+        <div class="app-links">
+            <a href="https://chatbotgoogle-test.up.railway.app/" class="app-button" target="_blank">
+                <div class="app-icon">🤖</div>
+                <span>NEW Stencil Chat Bot</span>
+                <span class="status-badge prod">PRODUCTION</span>
+            </a>
+            
+            <a href="https://stencilizer-google-production.up.railway.app/" class="app-button" target="_blank">
+                <div class="app-icon">🎨</div>
+                <span>Stencilizer</span>
+                <span class="status-badge test">TEST</span>
+            </a>
+            
+            <a href="https://vectorizer-ehsxjbc-production.up.railway.app" class="app-button" target="_blank">
+                <div class="app-icon">📐</div>
+                <span>Vectorizer</span>
+                <span class="status-badge test">TEST</span>
+            </a>
+        </div>
+        
+        <div class="footer">
+            <p>Last Update: <span class="date-display" id="date"></span></p>
+            <p style="margin-top: 15px; color: #ff6600; font-weight: bold;">
+                ⚠️ Digital Work Zone ⚠️
+            </p>
+        </div>
+    </div>
+
     <script>
-        document.getElementById('date').textContent = new Date().toLocaleDateString('en-US');
+        // Configuration GSAP
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Création des particules
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.width = Math.random() * 4 + 2 + 'px';
+                particle.style.height = particle.style.width;
+                particlesContainer.appendChild(particle);
+                
+                // Animation des particules
+                gsap.to(particle, {
+                    y: Math.random() * 100 - 50,
+                    x: Math.random() * 100 - 50,
+                    duration: Math.random() * 10 + 5,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut"
+                });
+            }
+        }
+        
+        // Animation du logo JBC
+        function animateJBCLogo() {
+            const logoChars = document.querySelectorAll('.logo-char');
+            
+            gsap.timeline({ delay: 0.5 })
+                .from(logoChars, {
+                    y: 100,
+                    opacity: 0,
+                    rotationX: 90,
+                    duration: 0.8,
+                    stagger: 0.2,
+                    ease: "back.out(1.7)"
+                });
+        }
+        
+        // Animation du titre lettre par lettre
+        function animateTitle() {
+            const titleChars = document.querySelectorAll('.title-char');
+            
+            gsap.timeline({ delay: 1.5 })
+                .to(titleChars, {
+                    opacity: 1,
+                    y: 0,
+                    rotationX: 0,
+                    duration: 0.6,
+                    stagger: 0.1,
+                    ease: "back.out(1.7)"
+                });
+        }
+        
+        // Animation des boutons d'applications
+        function animateAppButtons() {
+            const appButtons = document.querySelectorAll('.app-button');
+            
+            gsap.timeline({ delay: 2.5 })
+                .to(appButtons, {
+                    x: 0,
+                    opacity: 1,
+                    duration: 0.8,
+                    stagger: 0.2,
+                    ease: "power3.out"
+                });
+        }
+        
+        // Animation des cônes
+        function animateCones() {
+            const cones = document.querySelectorAll('.cone');
+            
+            cones.forEach((cone, index) => {
+                // Animation d'entrée
+                gsap.from(cone, {
+                    y: -200,
+                    rotation: 720,
+                    opacity: 0,
+                    duration: 1.5,
+                    delay: index * 0.3,
+                    ease: "bounce.out"
+                });
+                
+                // Animation continue de oscillation
+                gsap.to(cone, {
+                    y: "+=10",
+                    duration: 2 + index * 0.5,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut"
+                });
+                
+                // Interaction au clic
+                cone.addEventListener('click', () => {
+                    gsap.to(cone, {
+                        rotation: "+=360",
+                        scale: 1.2,
+                        duration: 0.6,
+                        ease: "power2.out"
+                    });
+                    gsap.to(cone, {
+                        scale: 1,
+                        duration: 0.3,
+                        delay: 0.6,
+                        ease: "power2.out"
+                    });
+                });
+            });
+        }
+        
+        // Interaction avec le logo JBC
+        function setupJBCInteraction() {
+            const jbcLogo = document.getElementById('jbc-logo');
+            
+            jbcLogo.addEventListener('click', () => {
+                gsap.timeline()
+                    .to(jbcLogo, {
+                        scale: 0.8,
+                        duration: 0.1
+                    })
+                    .to(jbcLogo, {
+                        scale: 1.2,
+                        rotation: "+=10",
+                        duration: 0.3,
+                        ease: "power2.out"
+                    })
+                    .to(jbcLogo, {
+                        scale: 1,
+                        rotation: "-=10",
+                        duration: 0.4,
+                        ease: "elastic.out(1, 0.3)"
+                    });
+                
+                // Effet de particules lors du clic
+                createClickParticles(jbcLogo);
+            });
+        }
+        
+        // Création d'effet de particules au clic
+        function createClickParticles(element) {
+            const rect = element.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'fixed';
+                particle.style.left = centerX + 'px';
+                particle.style.top = centerY + 'px';
+                particle.style.width = '8px';
+                particle.style.height = '8px';
+                particle.style.background = '#ff4444';
+                particle.style.borderRadius = '50%';
+                particle.style.pointerEvents = 'none';
+                particle.style.zIndex = '1000';
+                document.body.appendChild(particle);
+                
+                const angle = (i * 360 / 15) * Math.PI / 180;
+                const distance = 100 + Math.random() * 50;
+                
+                gsap.timeline()
+                    .to(particle, {
+                        x: Math.cos(angle) * distance,
+                        y: Math.sin(angle) * distance,
+                        opacity: 0,
+                        scale: 0,
+                        duration: 1,
+                        ease: "power2.out"
+                    })
+                    .call(() => {
+                        document.body.removeChild(particle);
+                    });
+            }
+        }
+        
+        // Mise à jour de la date
+        function updateDate() {
+            const dateElement = document.getElementById('date');
+            const now = new Date();
+            dateElement.textContent = now.toLocaleDateString('en-US');
+        }
+        
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            animateJBCLogo();
+            animateTitle();
+            animateAppButtons();
+            animateCones();
+            setupJBCInteraction();
+            updateDate();
+            
+            // Easter egg : Konami Code
+            let konamiCode = [];
+            const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight'];
+            
+            document.addEventListener('keydown', (e) => {
+                konamiCode.push(e.key);
+                if (konamiCode.length > konamiSequence.length) {
+                    konamiCode.shift();
+                }
+                
+                if (konamiCode.join(',') === konamiSequence.join(',')) {
+                    // Mode disco !
+                    document.body.style.animation = 'hue-rotate 1s infinite linear';
+                    document.head.insertAdjacentHTML('beforeend', `
+                        <style>
+                            @keyframes hue-rotate {
+                                0% { filter: hue-rotate(0deg); }
+                                100% { filter: hue-rotate(360deg); }
+                            }
+                        </style>
+                    `);
+                    
+                    setTimeout(() => {
+                        document.body.style.animation = '';
+                    }, 10000);
+                }
+            });
+        });
     </script>
 </body>
 </html>
